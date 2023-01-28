@@ -38,6 +38,7 @@
 		"@smui/card": "^7.0.0-beta.0",
 		"smui-theme": "^7.0.0-beta.0",
 		"yarn": "^1.22.19",
-		"spotify-web-api-js": "1.5.2"
+		"spotify-web-api-js": "1.5.2",
+		"axios": "1.2.5"
 	}
 }
