@@ -1,6 +1,6 @@
 <main>
 	<nav>
-		<a href="/sugoroku/edit">edit</a>
+		<a href="/hoge/edit">edit</a>
 		<a href="/">home</a>
 	</nav>
 	<!-- NOTE: slotに+pageが入る -->

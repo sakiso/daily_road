@@ -9,8 +9,8 @@
 
 <main>
 	<h1>トップだよ</h1>
-	<Button variant="raised">hoge</Button>
-	<Card padded>hoge</Card>
+
+	ここに再生を出したい まずSpotify APIでなんかやる
 </main>
 
 <style>
