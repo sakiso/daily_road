@@ -10,7 +10,8 @@ export async function jumpToSpotifyLoginPage(client_id: string) {
       client_id: client_id,
       state: state,
       scope: 'streaming user-library-read',
-      redirect_uri: 'http://localhost:5173/'
+      redirect_uri: 'http://localhost:5173/authorize'
+      //todo: 本番移行したときドメインを自動で帰
     };
 
   const queryParams = new URLSearchParams(params).toString()
