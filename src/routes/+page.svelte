@@ -13,10 +13,6 @@
 
 <main>
 	<h1>トップだよ</h1>
-	ここに再生を出したい
-	<br />
-	まずSpotify APIでなんかやる
-	<br />
 	<Button on:click={() => jumpToSpotifyLoginPage(data.spotifyClientID)}>Login</Button>
 </main>
 
