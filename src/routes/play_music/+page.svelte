@@ -1,9 +1,5 @@
 <script lang="ts">
 	import { accessToken, state } from '$lib/stores/spotify_authorization_store';
-	// todo: リロードすると一瞬トークンなどが表示されるけどそのあと消える なんで？
-
-	console.log('$state at play music:');
-	console.log($state);
 </script>
 
 <svelte:head>
