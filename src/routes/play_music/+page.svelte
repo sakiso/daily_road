@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { accessToken, state } from '$lib/stores/spotify_authorization_store';
+	import Button, { Label } from '@smui/button';
+
+	function playback() {
+		console.log('playback!');
+		//todo: ここでSpotifyAPIに接続して再生する
+	}
 </script>
 
 <svelte:head>
@@ -7,13 +12,13 @@
 </svelte:head>
 
 <main>
-	<h1>Authorization Info</h1>
-	<h2>State</h2>
-	{$state}
-	<h2>Token</h2>
-	{$accessToken}
 	<h1>PlayMusic</h1>
 	ここに再生を出したい
+	<div>
+		<Button on:click={playback} variant="raised">
+			<Label>Playback!</Label>
+		</Button>
+	</div>
 </main>
 
 <style>
