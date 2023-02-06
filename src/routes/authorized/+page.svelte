@@ -1,6 +1,4 @@
 <script lang="ts">
-	//todo: stateの値が異なる場合は弾く
-	//todo: stateの値が一致している場合はtokenをstoreに保存する
 	import { accessToken, state } from '$lib/stores/spotify_authorization_store';
 	import { onMount } from 'svelte';
 	export let data: { state: string; accessToken: string };

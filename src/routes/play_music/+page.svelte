@@ -1,8 +1,11 @@
 <script lang="ts">
+	import { accessToken } from '$lib/stores/spotify_authorization_store';
 	import Button, { Label } from '@smui/button';
 
 	function playback() {
+		// todo: 切り出したい
 		console.log('playback!');
+		console.log($accessToken);
 		//todo: ここでSpotifyAPIに接続して再生する
 	}
 </script>
