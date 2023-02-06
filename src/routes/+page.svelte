@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from '@smui/button';
 	import Card from '@smui/card';
-	import { jumpToSpotifyLoginPage } from './jump_to_spotify_login_page';
+	import { loginSpotify } from '$lib/infrastructure/spotify_api';
 	import type { RootPageLoadData } from './types';
 
 	export let data: RootPageLoadData;
@@ -13,7 +13,7 @@
 
 <main>
 	<h1>トップだよ</h1>
-	<Button on:click={() => jumpToSpotifyLoginPage(data.spotifyClientID)}>Login</Button>
+	<Button on:click={() => loginSpotify(data.spotifyClientID)}>Login</Button>
 </main>
 
 <style>
