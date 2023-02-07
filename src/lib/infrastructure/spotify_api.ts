@@ -28,10 +28,10 @@ export class SpotifyApi {
 	async getCurrentUserProfile(accessToken: string): Promise<object> {
     // todo: CORS出る！！ proxyかます
     // https://stackoverflow.com/questions/72753092/how-to-proxy-on-svelte-kit-in-dev-mode が参考になりそう
-		const currentUserProfilePath = '/me';
+		const currentUserProfilePath = 'me';
 		let response = {};
 		axios
-			.get(`${this.baseUrl}${currentUserProfilePath}`, {
+			.get(`/api/v1/spotify_proxy/?path=${currentUserProfilePath}`, {
 				headers: {
 					Authorization: `Bearer ${accessToken}`
 				}
