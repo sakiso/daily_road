@@ -31,10 +31,10 @@ export class SpotifyApi {
 		const currentUserProfilePath = 'me';
 		let response = {};
     // todo: axiosじゃなくてfetchでもいいんかな
-		axios
+		await axios
 			.get(`/api/v1/spotify_proxy/?path=${currentUserProfilePath}`, {
 				headers: {
-					Authorization: `Bearer ${accessToken}`
+					Authorization: `Bearer ${accessToken}`,
 				}
 			})
 			.then((res) => {
