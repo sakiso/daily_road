@@ -30,6 +30,7 @@ export class SpotifyApi {
     // https://stackoverflow.com/questions/72753092/how-to-proxy-on-svelte-kit-in-dev-mode が参考になりそう
 		const currentUserProfilePath = 'me';
 		let response = {};
+    // todo: axiosじゃなくてfetchでもいいんかな
 		axios
 			.get(`/api/v1/spotify_proxy/?path=${currentUserProfilePath}`, {
 				headers: {

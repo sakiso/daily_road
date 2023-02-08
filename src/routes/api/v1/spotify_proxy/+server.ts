@@ -1,9 +1,13 @@
 /** CORS対策のためにSpotifyのAPIサーバーの間のプロキシとして使う */
-
-export function GET({ url }: { url: URL}) {
-  // todo;
+export async function GET({ url, request }: { url: URL, request: Request}) {
+  const bearerToken = request.headers.get('Authorization') || "";
   const targetPath = url.searchParams.get("path")
-  return fetch(`https://api.spotify.com/${targetPath + url.search}`);
 
-  // todo: ERR_CONTENT_DECODING_FAILEDになる
+  return fetch(
+    // todo; spotifyドメインとv1ははコンスタントに集約したい
+    `https://api.spotify.com/v1/${targetPath + url.search}`,
+    {headers: {
+      'Authorization': bearerToken
+    }},
+  );
 }
