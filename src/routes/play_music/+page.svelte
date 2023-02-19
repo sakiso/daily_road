@@ -1,8 +1,6 @@
 <script lang="ts">
-	// import { SpotifyApi } from '$lib/infrastructure/spotify_api';
 	import { accessToken } from '$lib/stores/spotify_authorization_store';
 	import Button, { Label } from '@smui/button';
-	import axios from 'axios';
 
 	let myProfile: any = {};
 
@@ -41,12 +39,11 @@
 			<Label>GetTrack!</Label>
 		</Button>
 		<br />
-		<br />
-		<br />
 		<Button on:click={getCurrentUserProfile} variant="raised">
 			<Label>getMyProfile!</Label>
 		</Button>
 		{myProfile.display_name}
+		<br />
 	</div>
 	<div>
 		<p />
