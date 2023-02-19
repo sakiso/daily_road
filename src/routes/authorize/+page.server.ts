@@ -1,40 +1,24 @@
-// import { error } from '@sveltejs/kit';
-// import { state } from "$lib/stores/spotify_authorization_store";
-
-// import axios from "axios";
-
 export async function load({ url }: { url: URL }) {
 	const state = url.searchParams.get('state');
 	const code = url.searchParams.get('code');
 
-	console.log('fetchまえ');
-
 	const params = { authenticationCode: code };
-	const headers = {
-		'Content-Type': 'application/x-www-form-urlencoded',
-	}
-	const hoge = await fetch('http://localhost:5173/api/v1/spotify_proxy/token', {
+	const response = await fetch('http://localhost:5173/api/v1/spotify_proxy/token', {
 		method: 'POST',
-		// headers: headers,
 		body: JSON.stringify(params)
-	})
-
-	console.log("fetchおわり")
-	console.log(await hoge.json())
-	// console.log(await hoge.json())
-	// console.log(await hoge.text())
-	// const response: authorizationResponse = hoge.json(); // json()するとterminateされる
-
-	// await axios.post('http://localhost:5173/api/v1/spotify_proxy/token',params)
-
-	return { state: state, accessToken: "response.access_token"};
-	// return { state: state, accessToken: response.access_token };
+	});
+	const responseJson: authorizationResponse = await response.json();
+	console.log("🚀 ~ file: +page.server.ts:11 ~ load ~ responseJson", responseJson)
+	return { state: state, accessToken: responseJson.access_token };
 }
 
 interface authorizationResponse {
-	access_token: string;
-	token_type: string;
-	expires_in: number;
-	refresh_token: string;
-	scope: string;
+	access_token: string | undefined;
+	token_type: string | undefined;
+	expires_in: number | undefined;
+	refresh_token: string | undefined;
+	scope: string | undefined;
+	// エラーの場合は以下2項目のみ
+	error: string | undefined;
+	error_description: string | undefined;
 }

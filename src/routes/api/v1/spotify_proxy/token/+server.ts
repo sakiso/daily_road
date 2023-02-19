@@ -1,31 +1,32 @@
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '$env/static/private';
 
 export async function POST({ request }: { request: Request }) {
-	const requestBody:{authenticationCode: string} = await request.json()
-	const targetUrl = 'https://accounts.spotify.com/api/token'
+	const requestBody: { authenticationCode: string } = await request.json();
+
+	const targetUrl = 'https://accounts.spotify.com/api/token';
 	const encodedClientInfo = Buffer.from(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString(
 		'base64'
 	);
-
 	const headers = {
 		'Content-Type': 'application/x-www-form-urlencoded',
-		'Authorization': 'Basic ' + encodedClientInfo
+		Authorization: 'Basic ' + encodedClientInfo
 	};
 	const params = {
-		'code': requestBody.authenticationCode,
-		'redirect_uri': 'http://localhost:5173/authorize',
-		'grant_type': 'authorization_code',
-				}	
+		code: requestBody.authenticationCode,
+		redirect_uri: 'http://localhost:5173/authorize',
+		grant_type: 'authorization_code'
+	};
 
-	const querystring = new URLSearchParams(params).toString()
+	// NOTE: content-typeがx-www-form-urlencodedのためクエリストリングの形式にする必要がある
+	const querystring = new URLSearchParams(params).toString();
 
-	const response:Response = await fetch(targetUrl,{
-    method: 'POST',
+	const response: Response = await fetch(targetUrl, {
+		method: 'POST',
 		headers: headers,
-		body: querystring // NOTE: content-typeがx-www-form-urlencodedのためクエリストリングの形式にする必要がある
-	})
-	// console.log("🚀 ~ file: +server.ts:27 ~ POST ~ response", await response.json())
-	const hoge = response.clone()
-	return new Response(hoge.body)
-	// return response;
+		body: querystring
+	});
+
+	// HACK: そのままresponseを移送すると受取先でパースしたとき"fetch typeerror: terminated"のエラーが出るため、
+	//       新しいResponseオブジェクトを生成している 原因は未解明
+	return new Response(response.body);
 }
