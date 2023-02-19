@@ -1,4 +1,8 @@
-import { persist, createLocalStorage, persistBrowserSession } from '@macfja/svelte-persistent-store';
+import {
+	persist,
+	createLocalStorage,
+	persistBrowserSession
+} from '@macfja/svelte-persistent-store';
 import { writable } from 'svelte/store';
 
 export const state = persistBrowserSession(writable(''), 'spotifyState'); // 永続化

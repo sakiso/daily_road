@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { accessToken, state } from '$lib/stores/spotify_authorization_store';
+	import { accessToken, refreshToken, state } from '$lib/stores/spotify_authorization_store';
 	import { onMount } from 'svelte';
-	export let data: { state: string; accessToken: string };
+	export let data: { state: string; accessToken: string; refreshToken: string };
 
 	onMount(async () => {
 		const originalState = $state;
@@ -11,6 +11,7 @@
 			// todo: エラー画面に飛ばすかエラーをthrowする
 		}
 		accessToken.set(data.accessToken);
+		refreshToken.set(data.accessToken);
 	});
 </script>
 

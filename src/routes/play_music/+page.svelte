@@ -1,6 +1,6 @@
 <script lang="ts">
 	// import { SpotifyApi } from '$lib/infrastructure/spotify_api';
-	import { authenticationCode } from '$lib/stores/spotify_authorization_store';
+	import { accessToken } from '$lib/stores/spotify_authorization_store';
 	import Button, { Label } from '@smui/button';
 	import axios from 'axios';
 
@@ -10,23 +10,15 @@
 		//todo: ここでSpotifyAPIに接続して再生する
 	}
 
-	async function getAccessToken(): Promise<void> {
-		await axios
-			.post('/api/v1/spotify_proxy/token', {
-				code: $authenticationCode,
-				hoge: 'fuga'
-				// headers: {
-				// 	// contentType: 'application/json'
-				// }
-			})
-			.then((res) => {
-				console.log(res);
-			});
-	}
-
-	function getCurrentUserProfile(): void {
-		// const spotifyApi = new SpotifyApi();
-		// myProfile = spotifyApi.getCurrentUserProfile($accessToken);
+	async function getCurrentUserProfile(): Promise<void> {
+		const response = await fetch('http://localhost:5173/api/v1/spotify_proxy/me', {
+			method: 'GET',
+			headers: {
+				Authorization: 'Bearer ' + $accessToken
+			}
+		});
+		myProfile = await response.json();
+		console.log('🚀 ~ file: +page.svelte:21 ~ getCurrentUserProfile ~ myProfile', myProfile);
 	}
 </script>
 
@@ -43,14 +35,15 @@
 		</Button>
 		<br />
 		<br />
-		<Button on:click={getAccessToken} variant="raised">
+		<!-- <Button on:click={getAccessToken} variant="raised">
 			<Label>getAccessToken!</Label>
-		</Button>
+		</Button> -->
 		<br />
 		<br />
 		<Button on:click={getCurrentUserProfile} variant="raised">
 			<Label>getMyProfile!</Label>
 		</Button>
+		{myProfile}
 	</div>
 	<div>
 		<p />

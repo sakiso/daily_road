@@ -8,8 +8,12 @@ export async function load({ url }: { url: URL }) {
 		body: JSON.stringify(params)
 	});
 	const responseJson: authorizationResponse = await response.json();
-	console.log("🚀 ~ file: +page.server.ts:11 ~ load ~ responseJson", responseJson)
-	return { state: state, accessToken: responseJson.access_token };
+	console.log('🚀 ~ file: +page.server.ts:11 ~ load ~ responseJson', responseJson);
+	return {
+		state: state,
+		accessToken: responseJson.access_token,
+		refreshToken: responseJson.refresh_token
+	};
 }
 
 interface authorizationResponse {
