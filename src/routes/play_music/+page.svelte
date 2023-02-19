@@ -6,10 +6,18 @@
 
 	let myProfile: any = {};
 
-	function playback(): void {
-		//todo: ここでSpotifyAPIに接続して再生する
+	async function getTrack(): Promise<void> {
+		const response = await fetch(
+			'http://localhost:5173/api/v1/spotify_proxy/tracks/6eBiZCdAjVkcuW4h3F94iV',
+			{
+				method: 'GET',
+				headers: {
+					Authorization: 'Bearer ' + $accessToken
+				}
+			}
+		);
+		console.log(await response.json());
 	}
-
 	async function getCurrentUserProfile(): Promise<void> {
 		const response = await fetch('http://localhost:5173/api/v1/spotify_proxy/me', {
 			method: 'GET',
@@ -18,7 +26,6 @@
 			}
 		});
 		myProfile = await response.json();
-		console.log('🚀 ~ file: +page.svelte:21 ~ getCurrentUserProfile ~ myProfile', myProfile);
 	}
 </script>
 
@@ -30,14 +37,10 @@
 	<h1>PlayMusic</h1>
 	ここに再生を出したい
 	<div>
-		<Button on:click={playback} variant="raised">
-			<Label>Playback!</Label>
+		<Button on:click={getTrack} variant="raised">
+			<Label>GetTrack!</Label>
 		</Button>
 		<br />
-		<br />
-		<!-- <Button on:click={getAccessToken} variant="raised">
-			<Label>getAccessToken!</Label>
-		</Button> -->
 		<br />
 		<br />
 		<Button on:click={getCurrentUserProfile} variant="raised">
