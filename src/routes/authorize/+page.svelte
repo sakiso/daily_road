@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { accessToken, state } from '$lib/stores/spotify_authorization_store';
 	import { onMount } from 'svelte';
-	export let data: { state: string; accessToken: string };
+	export let data: { state: string; accessToken: string; hoge: string };
 
 	onMount(async () => {
 		const originalState = $state;
 
 		const responsedState = data.state;
-		if (originalState !== responsedState + 'a') {
+		if (originalState !== responsedState) {
 			// todo: エラー画面に飛ばすかエラーをthrowする
 		}
-		accessToken.set(data.accessToken);
+		accessToken.set(data.accessToken); //todo: これ保存する必要なくなる
 	});
 </script>
 
