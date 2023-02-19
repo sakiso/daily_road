@@ -1,10 +1,9 @@
 <script lang="ts">
 	import Button from '@smui/button';
-	import Card from '@smui/card';
 	// import { SpotifyApi } from '$lib/infrastructure/spotify_api';
-	import type { RootPageLoadData } from './types';
-	import { state } from '$lib/stores/spotify_authorization_store';
 	import Constants from '$lib/constants';
+	import { state } from '$lib/stores/spotify_authorization_store';
+	import type { RootPageLoadData } from './types';
 
 	export let data: RootPageLoadData;
 
@@ -15,7 +14,8 @@
 			response_type: 'code',
 			client_id: clientId,
 			state: stateStr,
-			scope: 'streaming user-library-read',
+			scope:
+				'streaming user-library-read user-read-playback-state user-modify-playback-state user-read-currently-playing user-read-email user-read-private',
 			redirect_uri: 'http://localhost:5173/authorize'
 			//todo: 本番移行したときドメインが自動で変わるようにする
 		};
