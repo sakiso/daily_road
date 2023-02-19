@@ -4,7 +4,7 @@
 	import Button, { Label } from '@smui/button';
 	import axios from 'axios';
 
-	let myProfile = {};
+	let myProfile: any = {};
 
 	function playback(): void {
 		//todo: ここでSpotifyAPIに接続して再生する
@@ -43,7 +43,7 @@
 		<Button on:click={getCurrentUserProfile} variant="raised">
 			<Label>getMyProfile!</Label>
 		</Button>
-		{myProfile}
+		{myProfile.display_name}
 	</div>
 	<div>
 		<p />
