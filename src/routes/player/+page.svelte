@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { accessToken } from '$lib/stores/spotify_authorization_store';
+	import Game from './game.svelte';
 
 	const token = $accessToken;
 
@@ -33,6 +34,7 @@
 
 <main>
 	<p id="token" style="display: none;">{token}</p>
+	<!-- todo: Bodyタグいるの？ -->
 	<body>
 		<h1>Spotify Web Playback SDK Quick Start</h1>
 		<button id="togglePlay">Toggle Play</button>
@@ -52,7 +54,6 @@
 				document.getElementById('togglePlay').onclick = function () {
 					player.togglePlay();
 				};
-
 				// Listeners
 				// Ready
 				player.addListener('ready', ({ device_id }) => {
@@ -86,6 +87,7 @@
 			};
 		</script>
 		<button on:click={playback}>playback_ソワレ</button>
+		<Game />
 	</body>
 </main>
 
