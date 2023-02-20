@@ -1,7 +1,29 @@
-<script>
+<script lang="ts">
 	import { accessToken } from '$lib/stores/spotify_authorization_store';
 
 	const token = $accessToken;
+
+	async function playback(): Promise<void> {
+		await fetch('http://localhost:5173/api/v1/spotify_proxy/me/player/play', {
+			method: 'PUT',
+			headers: {
+				Authorization: 'Bearer ' + $accessToken,
+				ContentType: 'application/json'
+			},
+			body: JSON.stringify({
+				deviceId: fetchDeviceIdOnCookie(), // todo: これ動的にしないと毎回変わる
+				uris: ['spotify:track:6eBiZCdAjVkcuW4h3F94iV']
+			})
+		});
+	}
+	function fetchDeviceIdOnCookie(): String {
+		const cookieValue =
+			document?.cookie
+				?.split('; ')
+				?.find((row) => row.startsWith('deviceId'))
+				?.split('=')[1] || '';
+		return cookieValue;
+	}
 </script>
 
 <svelte:head>
@@ -33,7 +55,7 @@
 				// Listeners
 				// Ready
 				player.addListener('ready', ({ device_id }) => {
-					console.log('Ready with Device ID', device_id);
+					document.cookie = `deviceId=${device_id}`;
 				});
 				// Not Ready
 				player.addListener('not_ready', ({ device_id }) => {
@@ -53,6 +75,7 @@
 				player.connect();
 			};
 		</script>
+		<button on:click={playback}>playback_ソワレ</button>
 	</body>
 </main>
 
