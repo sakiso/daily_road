@@ -1,6 +1,6 @@
 import {
-	persist,
 	createLocalStorage,
+	persist,
 	persistBrowserSession
 } from '@macfja/svelte-persistent-store';
 import { writable } from 'svelte/store';
