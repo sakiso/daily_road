@@ -33,7 +33,6 @@
 
 <main>
 	<h1>PlayMusic</h1>
-	ここに再生を出したい
 	<div>
 		<Button on:click={getTrack} variant="raised">
 			<Label>GetTrack!</Label>

@@ -4,17 +4,18 @@
 	const token = $accessToken;
 
 	async function playback(): Promise<void> {
-		await fetch('http://localhost:5173/api/v1/spotify_proxy/me/player/play', {
+		const res = await fetch('http://localhost:5173/api/v1/spotify_proxy/me/player/play', {
 			method: 'PUT',
 			headers: {
 				Authorization: 'Bearer ' + $accessToken,
 				ContentType: 'application/json'
 			},
 			body: JSON.stringify({
-				deviceId: fetchDeviceIdOnCookie(), // todo: これ動的にしないと毎回変わる
+				deviceId: fetchDeviceIdOnCookie(),
 				uris: ['spotify:track:6eBiZCdAjVkcuW4h3F94iV']
 			})
 		});
+		console.log(await res.json());
 	}
 	function fetchDeviceIdOnCookie(): String {
 		const cookieValue =
@@ -31,7 +32,7 @@
 </svelte:head>
 
 <main>
-	<p id="token">{token}</p>
+	<p id="token" style="display: none;">{token}</p>
 	<body>
 		<h1>Spotify Web Playback SDK Quick Start</h1>
 		<button id="togglePlay">Toggle Play</button>
@@ -57,6 +58,15 @@
 				player.addListener('ready', ({ device_id }) => {
 					document.cookie = `deviceId=${device_id}`;
 				});
+				// // Player State Changed
+				// player.addListener(
+				// 	'player_state_changed',
+				// 	({ position, duration, track_window: { current_track } }) => {
+				// 		console.log('Currently Playing', current_track);
+				// 		console.log('Position in Song', position);
+				// 		console.log('Duration of Song', duration);
+				// 	}
+				// );
 				// Not Ready
 				player.addListener('not_ready', ({ device_id }) => {
 					console.log('Device ID has gone offline', device_id);
