@@ -4,35 +4,42 @@
 		const canvas = <HTMLCanvasElement>document.getElementById('game-canvas')!;
 		var ctx = canvas.getContext('2d')!;
 
-		const LANE_WIDTH = 80;
-		const LANE_HEIGHT = canvas.height;
+		const NOTE_WIDTH = 70;
+		const NOTE_HEIGHT = 5; //canvas.height;
 		const LANE_COUNT = 4;
-		const LANE_SPACING = (canvas.width - LANE_WIDTH * LANE_COUNT) / (LANE_COUNT + 1);
+		const LANE_SPACING = 3;
+		const NOTE_SPEED = 1.3;
 
 		for (let i = 0; i < LANE_COUNT; i++) {
-			const x = LANE_SPACING + i * (LANE_WIDTH + LANE_SPACING);
+			const x = LANE_SPACING + i * (NOTE_WIDTH + LANE_SPACING);
 			const y = 0;
-			ctx.fillRect(x, y, LANE_WIDTH, LANE_HEIGHT);
+			ctx.fillRect(x, y, NOTE_WIDTH, NOTE_HEIGHT);
 		}
 
 		const NOTES = [
-			{ lane: 0, position: 0, speed: 5 },
-			{ lane: 1, position: 0, speed: 5 },
-			{ lane: 2, position: 0, speed: 5 },
-			{ lane: 3, position: 0, speed: 5 }
+			//todo: ドメインモデル作ろう Speedは定数で管理しよう
+			{ lane: 0, position: 0 },
+			{ lane: 1, position: -10 },
+			{ lane: 2, position: -20 },
+			{ lane: 3, position: -30 },
+			{ lane: 1, position: -40 },
+			{ lane: 0, position: -50 },
+			{ lane: 3, position: -60 },
+			{ lane: 2, position: -70 }
 		];
 
 		function drawNotes() {
+			// todo: canvas外に出たあとも計算しつづけてて無駄なのでなんとかしたいなぁ
 			for (const note of NOTES) {
-				const x = LANE_SPACING + note.lane * (LANE_WIDTH + LANE_SPACING);
+				const x = note.lane * (NOTE_WIDTH + LANE_SPACING);
 				const y = note.position;
-				ctx.fillRect(x, y, LANE_WIDTH, LANE_HEIGHT / 8);
+				ctx.fillRect(x, y, NOTE_WIDTH, NOTE_HEIGHT);
 			}
 		}
 
 		function updateNotes() {
 			for (const note of NOTES) {
-				note.position += note.speed;
+				note.position += NOTE_SPEED;
 			}
 		}
 
@@ -48,9 +55,13 @@
 </script>
 
 <main>
-	gameだよ
-	<canvas id="game-canvas" />
+	gameだよ<br />
+	<canvas id="game-canvas" class="game-canvas" />
 </main>
 
 <style>
+	.game-canvas {
+		width: 290px;
+		height: 480px;
+	}
 </style>
