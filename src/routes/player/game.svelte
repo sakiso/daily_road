@@ -35,6 +35,7 @@
 		canvas = <HTMLCanvasElement>document.getElementById('game-canvas')!;
 		ctx = canvas.getContext('2d')!;
 		// todo: リスナーを張って上のコンポーネントで楽曲再生されたら同時にゲーム画面をスタートさせる
+		drawLanes();
 	});
 
 	function drawLanes() {

@@ -2,6 +2,8 @@
 	import { accessToken } from '$lib/stores/spotify_authorization_store';
 	import Game from './game.svelte';
 
+	const token = $accessToken;
+
 	async function playback(): Promise<void> {
 		await fetch('http://localhost:5173/api/v1/spotify_proxy/me/player/play', {
 			method: 'PUT',
@@ -30,6 +32,7 @@
 </svelte:head>
 
 <main>
+	<p id="token" style="display: none;">{token}</p>
 	<!-- todo: Bodyタグいるの？ -->
 	<body>
 		<h1>Spotify Web Playback SDK Quick Start</h1>
@@ -37,11 +40,14 @@
 		<script src="https://sdk.scdn.co/spotify-player.js"></script>
 		<script>
 			window.onSpotifyWebPlaybackSDKReady = () => {
+				// todo: リロードしてゲーム画面に来ると以下のエラーが出て再生できない
+				// index.js:3 The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page.
+
 				const token = document.getElementById('token').innerHTML;
 				const player = new Spotify.Player({
 					name: 'Spotify Game Player',
-					getOAuthToken: (cb) => {
-						cb(token);
+					getOAuthToken: (callback) => {
+						callback(token);
 					},
 					volume: 1.0
 				});
@@ -50,26 +56,18 @@
 				document.getElementById('togglePlay').onclick = function () {
 					player.togglePlay();
 				};
-				// --- Listeners ---
+				// Listeners
 				// Ready
 				player.addListener('ready', ({ device_id }) => {
 					document.cookie = `deviceId=${device_id}`;
 				});
-				// Not Ready
-				player.addListener('not_ready', ({ device_id }) => {
-					console.log('Device ID has gone offline', device_id);
+				// Player State Changed
+				player.addListener('player_state_changed', ({ paused }) => {
+					console.log('paused of Song', paused);
+					// todo: 再生と連動して子コンポーネントGameを開始したい。最初の1回だけ！
+					// https://qiita.com/H40831/items/b6e48d74ba9070e66daa
+					// ↑子コンポーネントの関数をexportしておき、こっちから実行する
 				});
-				// Other Utillity
-				player.addListener('initialization_error', ({ message }) => {
-					console.error(message);
-				});
-				player.addListener('authentication_error', ({ message }) => {
-					console.error(message);
-				});
-				player.addListener('account_error', ({ message }) => {
-					console.error(message);
-				});
-
 				player.connect();
 			};
 		</script>
