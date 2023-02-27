@@ -1,20 +1,30 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+
+	let elapsedTimeFromGameStart = 0;
+	let key = '';
+	let latestKeyDownTimes = {
+		d: 0,
+		f: 0,
+		j: 0,
+		k: 0
+	};
+
 	onMount(() => {
 		const canvas = <HTMLCanvasElement>document.getElementById('game-canvas')!;
-		var ctx = canvas.getContext('2d')!;
+		let ctx = canvas.getContext('2d')!;
+		// // Canvasをクリアする
+		// ctx.clearRect(0, 0, canvas.width, canvas.height);
+		// Canvasの背景色を薄いグレーに設定
+
+		// ctx.fillStyle = '#000000';
 
 		const NOTE_WIDTH = 70;
 		const NOTE_HEIGHT = 5; //canvas.height;
 		const LANE_COUNT = 4;
-		const LANE_SPACING = 3;
-		const NOTE_SPEED = 1.3;
-
-		for (let i = 0; i < LANE_COUNT; i++) {
-			const x = LANE_SPACING + i * (NOTE_WIDTH + LANE_SPACING);
-			const y = 0;
-			ctx.fillRect(x, y, NOTE_WIDTH, NOTE_HEIGHT);
-		}
+		const LANE_SPACING = 5;
+		const NOTE_SPEED = 1;
+		const NOTE_HI_SPEED = 3;
 
 		const NOTES = [
 			//todo: ドメインモデル作ろう Speedは定数で管理しよう
@@ -28,11 +38,21 @@
 			{ lane: 2, position: -70 }
 		];
 
+		function drawLanes() {
+			for (let i = 0; i < LANE_COUNT; i++) {
+				const x = i * (NOTE_WIDTH + LANE_SPACING);
+				const y = 0;
+				ctx.fillStyle = '#354f77';
+				ctx.fillRect(x, y, NOTE_WIDTH, canvas.height);
+				ctx.fillStyle = '#000'; // 初期化
+			}
+		}
+
 		function drawNotes() {
-			// todo: canvas外に出たあとも計算しつづけてて無駄なのでなんとかしたいなぁ
 			for (const note of NOTES) {
 				const x = note.lane * (NOTE_WIDTH + LANE_SPACING);
-				const y = note.position;
+				const y = note.position * NOTE_HI_SPEED;
+				ctx.fillStyle = '#70e5ba';
 				ctx.fillRect(x, y, NOTE_WIDTH, NOTE_HEIGHT);
 			}
 		}
@@ -43,20 +63,53 @@
 			}
 		}
 
-		function gameLoop() {
+		function gameLoop(timestamp?: DOMHighResTimeStamp) {
+			console.log(timestamp);
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			drawLanes();
 			drawNotes();
 			updateNotes();
-			requestAnimationFrame(gameLoop);
+			timestamp ||= 0;
+			elapsedTimeFromGameStart = timestamp;
+			if (timestamp < 2000) {
+				// 開発用に一定時間で止める
+				requestAnimationFrame(gameLoop);
+			}
 		}
 
 		gameLoop();
 	});
+
+	function handleKeydown(event: KeyboardEvent) {
+		key = event.key; // todo: これが押されたときのelapsedTimeFromGameStartを取得する
+		switch (key) {
+			case 'd':
+				latestKeyDownTimes.d = elapsedTimeFromGameStart;
+				break;
+			case 'f':
+				latestKeyDownTimes.f = elapsedTimeFromGameStart;
+				break;
+			case 'j':
+				latestKeyDownTimes.j = elapsedTimeFromGameStart;
+				break;
+			case 'k':
+				latestKeyDownTimes.k = elapsedTimeFromGameStart;
+				break;
+		}
+	}
 </script>
 
+<svelte:window on:keydown={handleKeydown} />
 <main>
-	gameだよ<br />
 	<canvas id="game-canvas" class="game-canvas" />
+	<p>
+		elapsedTimeFromGameStart: {elapsedTimeFromGameStart}<br />
+		keydown log: {key}<br />
+		D: {latestKeyDownTimes.d}<br />
+		F: {latestKeyDownTimes.f}<br />
+		J: {latestKeyDownTimes.j}<br />
+		K: {latestKeyDownTimes.k}<br />
+	</p>
 </main>
 
 <style>

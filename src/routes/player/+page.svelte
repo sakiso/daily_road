@@ -2,10 +2,8 @@
 	import { accessToken } from '$lib/stores/spotify_authorization_store';
 	import Game from './game.svelte';
 
-	const token = $accessToken;
-
 	async function playback(): Promise<void> {
-		const res = await fetch('http://localhost:5173/api/v1/spotify_proxy/me/player/play', {
+		await fetch('http://localhost:5173/api/v1/spotify_proxy/me/player/play', {
 			method: 'PUT',
 			headers: {
 				Authorization: 'Bearer ' + $accessToken,
@@ -16,7 +14,6 @@
 				uris: ['spotify:track:6eBiZCdAjVkcuW4h3F94iV']
 			})
 		});
-		console.log(await res.json());
 	}
 	function fetchDeviceIdOnCookie(): String {
 		const cookieValue =
@@ -33,7 +30,6 @@
 </svelte:head>
 
 <main>
-	<p id="token" style="display: none;">{token}</p>
 	<!-- todo: Bodyタグいるの？ -->
 	<body>
 		<h1>Spotify Web Playback SDK Quick Start</h1>
@@ -54,20 +50,11 @@
 				document.getElementById('togglePlay').onclick = function () {
 					player.togglePlay();
 				};
-				// Listeners
+				// --- Listeners ---
 				// Ready
 				player.addListener('ready', ({ device_id }) => {
 					document.cookie = `deviceId=${device_id}`;
 				});
-				// // Player State Changed
-				// player.addListener(
-				// 	'player_state_changed',
-				// 	({ position, duration, track_window: { current_track } }) => {
-				// 		console.log('Currently Playing', current_track);
-				// 		console.log('Position in Song', position);
-				// 		console.log('Duration of Song', duration);
-				// 	}
-				// );
 				// Not Ready
 				player.addListener('not_ready', ({ device_id }) => {
 					console.log('Device ID has gone offline', device_id);
