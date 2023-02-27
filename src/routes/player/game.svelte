@@ -9,7 +9,8 @@
 	const NOTE_HI_SPEED = 3;
 
 	const NOTES = [
-		//todo: ドメインモデル作ろう Speedは定数で管理しよう
+		// todo: ドメインモデル作ろう Speedは定数で管理しよう
+		// todo: どうすればこのpositionをノーツの秒数と一致させられるか？
 		{ lane: 0, position: 0 },
 		{ lane: 1, position: -10 },
 		{ lane: 2, position: -20 },
@@ -34,7 +35,6 @@
 	onMount(() => {
 		canvas = <HTMLCanvasElement>document.getElementById('game-canvas')!;
 		ctx = canvas.getContext('2d')!;
-		// todo: リスナーを張って上のコンポーネントで楽曲再生されたら同時にゲーム画面をスタートさせる
 		drawLanes();
 	});
 
@@ -44,7 +44,7 @@
 			const y = 0;
 			ctx.fillStyle = '#354f77';
 			ctx.fillRect(x, y, NOTE_WIDTH, canvas.height);
-			ctx.fillStyle = '#000'; // 初期化
+			ctx.fillStyle = '#000'; // 初期化しておかないとこれ以降のfill処理が全部同じ色になる
 		}
 	}
 
@@ -78,7 +78,7 @@
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
-		key = event.key; // todo: これが押されたときのelapsedTimeFromGameStartを取得する
+		key = event.key;
 		switch (key) {
 			case 'd':
 				latestKeyDownTimes.d = elapsedTimeFromGameStart;
