@@ -4,6 +4,8 @@
 	import Game from './game.svelte';
 
 	const token = $accessToken;
+	let isGamePlaying: boolean = false;
+	let startGame: (timestamp?: DOMHighResTimeStamp) => {}; // 子コンポーネントからゲーム開始の関数を受け取る
 
 	async function playback(): Promise<void> {
 		await fetch('http://localhost:5173/api/v1/spotify_proxy/me/player/play', {
@@ -29,9 +31,8 @@
 
 	onMount(() => {
 		(window as any).onSpotifyWebPlaybackSDKReady = () => {
-			console.log('Spotify準備完了');
-			// todo: リロードしてゲーム画面に来ると以下のエラーが出て再生できない
-			// index.js:3 The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page.
+			// todo: リロードしてゲーム画面に来るとAudioContextを手動設定せよとのエラーで再生できないので、
+			//       GameStartのクリックでゲームのコンポーネントが読み込まれるようにしたい
 
 			const token = (document as any).getElementById('token').innerHTML;
 			const player = new Spotify.Player({
@@ -52,11 +53,11 @@
 				document.cookie = `deviceId=${device_id}`;
 			});
 			// Player State Changed
-			player.addListener('player_state_changed', ({ paused }: { paused: any }) => {
-				// todo: 再生と連動して子コンポーネントGameを開始したい。最初の1回だけ！
-				//       svelteでimportしたメソッドがつかえない！ これをなんとかSvelteのScriptにうつせないか・・・
-				// https://qiita.com/H40831/items/b6e48d74ba9070e66daa
-				// ↑子コンポーネントの関数をexportしておき、こっちから実行する
+			player.addListener('player_state_changed', () => {
+				// todo: 「ゲームが開始してるかどうか」はstoreで状態管理する
+				if (isGamePlaying) return; // すでにゲームが開始していればgameLoopを呼ばない
+				startGame();
+				isGamePlaying ||= true;
 			});
 			player.connect();
 		};
@@ -69,13 +70,12 @@
 
 <main>
 	<p id="token" style="display: none;">{token}</p>
-	<!-- todo: Bodyタグいるの？ -->
 	<body>
 		<h1>Spotify Web Playback SDK Quick Start</h1>
 		<script src="https://sdk.scdn.co/spotify-player.js"></script>
 		<button id="togglePlay">Toggle Play</button>
 		<button on:click={playback}>playback_ソワレ</button>
-		<Game />
+		<Game bind:gameLoop={startGame} />
 	</body>
 </main>
 

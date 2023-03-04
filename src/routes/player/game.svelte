@@ -31,7 +31,6 @@
 	};
 	let ctx: CanvasRenderingContext2D;
 	let canvas: HTMLCanvasElement;
-	let isGamePlaying: boolean = false;
 
 	onMount(() => {
 		canvas = <HTMLCanvasElement>document.getElementById('game-canvas')!;
@@ -43,7 +42,7 @@
 		for (let i = 0; i < LANE_COUNT; i++) {
 			const x = i * (NOTE_WIDTH + LANE_SPACING);
 			const y = 0;
-			ctx.fillStyle = '#354f77';
+			ctx.fillStyle = '#3d3d3d';
 			ctx.fillRect(x, y, NOTE_WIDTH, canvas.height);
 			ctx.fillStyle = '#000'; // 初期化しておかないとこれ以降のfill処理が全部同じ色になる
 		}
@@ -53,7 +52,7 @@
 		for (const note of NOTES) {
 			const x = note.lane * (NOTE_WIDTH + LANE_SPACING);
 			const y = note.position * NOTE_HI_SPEED;
-			ctx.fillStyle = '#70e5ba';
+			ctx.fillStyle = '#93bcf2';
 			ctx.fillRect(x, y, NOTE_WIDTH, NOTE_HEIGHT);
 		}
 	}
@@ -65,8 +64,7 @@
 	}
 
 	export function gameLoop(timestamp?: DOMHighResTimeStamp) {
-		isGamePlaying ||= true;
-
+		// 引数は経過時間が入ってくる
 		console.log(timestamp);
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		drawLanes();
