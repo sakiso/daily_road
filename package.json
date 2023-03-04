@@ -39,6 +39,7 @@
 		"@smui/card": "^7.0.0-beta.0",
 		"smui-theme": "^7.0.0-beta.0",
 		"yarn": "^1.22.19",
-		"@macfja/svelte-persistent-store": "2.2.1"
+		"@macfja/svelte-persistent-store": "2.2.1",
+		"@types/spotify-web-playback-sdk": "0.1.15"
 	}
 }
