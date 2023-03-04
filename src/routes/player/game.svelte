@@ -31,6 +31,7 @@
 	};
 	let ctx: CanvasRenderingContext2D;
 	let canvas: HTMLCanvasElement;
+	let isGamePlaying: boolean = false;
 
 	onMount(() => {
 		canvas = <HTMLCanvasElement>document.getElementById('game-canvas')!;
@@ -63,7 +64,9 @@
 		}
 	}
 
-	function gameLoop(timestamp?: DOMHighResTimeStamp) {
+	export function gameLoop(timestamp?: DOMHighResTimeStamp) {
+		isGamePlaying ||= true;
+
 		console.log(timestamp);
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		drawLanes();
@@ -71,7 +74,7 @@
 		updateNotes();
 		timestamp ||= 0;
 		elapsedTimeFromGameStart = timestamp;
-		if (timestamp < 2000) {
+		if (timestamp < 10000) {
 			// 開発用に一定時間で止める
 			requestAnimationFrame(gameLoop);
 		}

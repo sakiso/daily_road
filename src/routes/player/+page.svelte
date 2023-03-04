@@ -63,8 +63,8 @@
 				});
 				// Player State Changed
 				player.addListener('player_state_changed', ({ paused }) => {
-					console.log('paused of Song', paused);
 					// todo: 再生と連動して子コンポーネントGameを開始したい。最初の1回だけ！
+					//       svelteでimportしたメソッドがつかえない！ これをなんとかSvelteのScriptにうつせないか・・・
 					// https://qiita.com/H40831/items/b6e48d74ba9070e66daa
 					// ↑子コンポーネントの関数をexportしておき、こっちから実行する
 				});
