@@ -23,9 +23,9 @@
 	// 	{ lane: 2, appearingFrame: 70 }
 	// ];
 
-	const chart = new Chart(70, 5, soiree);
+	const chart = new Chart(soiree);
 	let notes = chart.notes;
-	console.log(notes);
+	console.log(notes[0]);
 
 	let elapsedTimeFromGameStart = 0;
 	let key = '';
@@ -79,7 +79,7 @@
 		updateNotes();
 		timestamp ||= 0;
 		elapsedTimeFromGameStart = timestamp;
-		if (timestamp < 10000) {
+		if (timestamp < 35000) {
 			// 開発用に一定時間で止める
 			requestAnimationFrame(gameLoop);
 		}
@@ -120,6 +120,6 @@
 <style>
 	.game-canvas {
 		width: 290px;
-		height: 480px;
+		height: 530px;
 	}
 </style>
