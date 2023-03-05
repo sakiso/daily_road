@@ -9,21 +9,8 @@
 
 	const LANE_COUNT = 4;
 	const LANE_SPACING = 5;
-	// const HI_SPEED = 1; // いわゆるハイスピ 大きくするとノーツの間隔が開く
 	const noteSpeed = 0.5; // ノーツが表示されてから判定ラインに重なるまでの時間。緑数字
 
-	// let notes = [
-	// 	// todo: ドメインモデル作ろう Speedは定数で管理しよう
-	// 	// todo: どうすればこのpositionをノーツの秒数と一致させられるか？
-	// 	{ lane: 0, appearingFrame: 0 },
-	// 	{ lane: 1, appearingFrame: 10 },
-	// 	{ lane: 2, appearingFrame: 20 },
-	// 	{ lane: 3, appearingFrame: 30 },
-	// 	{ lane: 1, appearingFrame: 40 },
-	// 	{ lane: 0, appearingFrame: 50 },
-	// 	{ lane: 3, appearingFrame: 60 },
-	// 	{ lane: 2, appearingFrame: 70 }
-	// ];
 	let notes: Array<Note>;
 	let elapsedTimeFromGameStart = 0;
 	let key = '';
@@ -45,15 +32,6 @@
 		drawNotes();
 		drawJudgeLine();
 	});
-
-	// function setHiSpeed() {
-	// 	notes = notes.map((note) => {
-	// 		return {
-	// 			...note,
-	// 			appearingFrame: note.appearingFrame * noteSpeed
-	// 		};
-	// 	});
-	// }
 
 	function drawLanes() {
 		for (let i = 0; i < LANE_COUNT; i++) {
@@ -99,7 +77,7 @@
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		drawLanes();
 		drawJudgeLine();
-		updateNotes(); // todo: drawとupdateほんまに両方いる？
+		updateNotes();
 		drawNotes();
 		timestamp ||= 0;
 		elapsedTimeFromGameStart = timestamp;
