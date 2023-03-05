@@ -1,25 +1,31 @@
 <script lang="ts">
+	import soiree from '$lib/charts/soiree.json';
+	import { Chart } from '$lib/domain_model/chart';
 	import { onMount } from 'svelte';
 
 	const NOTE_WIDTH = 70;
 	const NOTE_HEIGHT = 5;
+
 	const LANE_COUNT = 4;
 	const LANE_SPACING = 5;
-	const NOTE_SPEED = 1;
 	const NOTE_HI_SPEED = 3;
 
-	const NOTES = [
-		// todo: ドメインモデル作ろう Speedは定数で管理しよう
-		// todo: どうすればこのpositionをノーツの秒数と一致させられるか？
-		{ lane: 0, position: 0 },
-		{ lane: 1, position: -10 },
-		{ lane: 2, position: -20 },
-		{ lane: 3, position: -30 },
-		{ lane: 1, position: -40 },
-		{ lane: 0, position: -50 },
-		{ lane: 3, position: -60 },
-		{ lane: 2, position: -70 }
-	];
+	// let notes = [
+	// 	// todo: ドメインモデル作ろう Speedは定数で管理しよう
+	// 	// todo: どうすればこのpositionをノーツの秒数と一致させられるか？
+	// 	{ lane: 0, appearingFrame: 0 },
+	// 	{ lane: 1, appearingFrame: 10 },
+	// 	{ lane: 2, appearingFrame: 20 },
+	// 	{ lane: 3, appearingFrame: 30 },
+	// 	{ lane: 1, appearingFrame: 40 },
+	// 	{ lane: 0, appearingFrame: 50 },
+	// 	{ lane: 3, appearingFrame: 60 },
+	// 	{ lane: 2, appearingFrame: 70 }
+	// ];
+
+	const chart = new Chart(70, 5, soiree);
+	let notes = chart.notes;
+	console.log(notes);
 
 	let elapsedTimeFromGameStart = 0;
 	let key = '';
@@ -49,21 +55,22 @@
 	}
 
 	function drawNotes() {
-		for (const note of NOTES) {
+		for (const note of notes) {
 			const x = note.lane * (NOTE_WIDTH + LANE_SPACING);
-			const y = note.position * NOTE_HI_SPEED;
+			const y = note.appearingFrame * NOTE_HI_SPEED;
 			ctx.fillStyle = '#93bcf2';
-			ctx.fillRect(x, y, NOTE_WIDTH, NOTE_HEIGHT);
+			ctx.fillRect(x, -y, NOTE_WIDTH, NOTE_HEIGHT);
 		}
 	}
 
 	function updateNotes() {
-		for (const note of NOTES) {
-			note.position += NOTE_SPEED;
+		for (const note of notes) {
+			note.appearingFrame -= chart.noteSpeed;
 		}
 	}
 
 	export function gameLoop(timestamp?: DOMHighResTimeStamp) {
+		// todo: とりあえず60fpsの前提とするが、ゆくゆくはフレームレートが違っても1秒間に60更新を守らせたい
 		// 引数は経過時間が入ってくる
 		console.log(timestamp);
 		ctx.clearRect(0, 0, canvas.width, canvas.height);

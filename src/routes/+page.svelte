@@ -3,7 +3,7 @@
 	// import { SpotifyApi } from '$lib/infrastructure/spotify_api';
 	import Constants from '$lib/constants';
 	import { state } from '$lib/stores/spotify_authorization_store';
-	import type { RootPageLoadData } from './types';
+	import type { RootPageLoadData } from '$lib/types/types';
 
 	export let data: RootPageLoadData;
 
