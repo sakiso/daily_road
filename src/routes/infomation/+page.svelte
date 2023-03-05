@@ -14,7 +14,6 @@
 				}
 			}
 		);
-		console.log(await response.json());
 	}
 	async function getCurrentUserProfile(): Promise<void> {
 		const response = await fetch('http://localhost:5173/api/v1/spotify_proxy/me', {

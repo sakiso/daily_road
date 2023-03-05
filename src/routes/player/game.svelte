@@ -1,14 +1,16 @@
 <script lang="ts">
 	import soiree from '$lib/charts/soiree.json';
 	import { Chart } from '$lib/domain_model/chart';
+	import type { Note } from '$lib/types/types';
 	import { onMount } from 'svelte';
 
 	const NOTE_WIDTH = 70;
-	const NOTE_HEIGHT = 5;
+	const NOTE_HEIGHT = 10;
 
 	const LANE_COUNT = 4;
 	const LANE_SPACING = 5;
-	const HI_SPEED = 16; // いわゆるハイスピ 大きくするとノーツの間隔が開く
+	// const HI_SPEED = 1; // いわゆるハイスピ 大きくするとノーツの間隔が開く
+	const noteSpeed = 0.5; // ノーツが表示されてから判定ラインに重なるまでの時間。緑数字
 
 	// let notes = [
 	// 	// todo: ドメインモデル作ろう Speedは定数で管理しよう
@@ -22,11 +24,7 @@
 	// 	{ lane: 3, appearingFrame: 60 },
 	// 	{ lane: 2, appearingFrame: 70 }
 	// ];
-
-	const chart = new Chart(soiree);
-	let notes = chart.notes;
-	console.log(notes);
-
+	let notes: Array<Note>;
 	let elapsedTimeFromGameStart = 0;
 	let key = '';
 	let latestKeyDownTimes = {
@@ -39,10 +37,23 @@
 	let canvas: HTMLCanvasElement;
 
 	onMount(() => {
+		const chart = new Chart(soiree);
+		notes = chart.notes;
 		canvas = <HTMLCanvasElement>document.getElementById('game-canvas')!;
 		ctx = canvas.getContext('2d')!;
 		drawLanes();
+		drawNotes();
+		drawJudgeLine();
 	});
+
+	// function setHiSpeed() {
+	// 	notes = notes.map((note) => {
+	// 		return {
+	// 			...note,
+	// 			appearingFrame: note.appearingFrame * noteSpeed
+	// 		};
+	// 	});
+	// }
 
 	function drawLanes() {
 		for (let i = 0; i < LANE_COUNT; i++) {
@@ -54,20 +65,31 @@
 		}
 	}
 
-	function drawNotes() {
+	function drawJudgeLine() {
 		for (const note of notes) {
 			const x = note.lane * (NOTE_WIDTH + LANE_SPACING);
-			const y = note.appearingFrame * HI_SPEED;
+			const y = 500 - NOTE_HEIGHT;
 			ctx.fillStyle = '#93bcf2';
-			ctx.fillRect(x, -y, NOTE_WIDTH, NOTE_HEIGHT);
+			ctx.fillRect(x, y, NOTE_WIDTH, NOTE_HEIGHT);
+			ctx.fillStyle = '#000';
+		}
+	}
+
+	function drawNotes() {
+		for (const note of notes) {
+			// レーンの高さ - (レーンの高さ - / 緑数字*60) * appearingFrame
+			const x = note.lane * (NOTE_WIDTH + LANE_SPACING);
+			const y = 500 - (500 / (noteSpeed * 60)) * note.appearingFrame;
+			ctx.fillStyle = '#93bcf2';
+			ctx.fillRect(x, y, NOTE_WIDTH, NOTE_HEIGHT);
+			ctx.fillStyle = '#000';
 		}
 	}
 
 	function updateNotes() {
 		for (const note of notes) {
-			note.appearingFrame -= chart.noteSpeed;
+			note.appearingFrame -= 1;
 		}
-		console.log(notes[0]);
 	}
 
 	export function gameLoop(timestamp?: DOMHighResTimeStamp) {
@@ -76,7 +98,8 @@
 		console.log(timestamp);
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		drawLanes();
-		updateNotes();
+		drawJudgeLine();
+		updateNotes(); // todo: drawとupdateほんまに両方いる？
 		drawNotes();
 		timestamp ||= 0;
 		elapsedTimeFromGameStart = timestamp;
@@ -107,7 +130,7 @@
 
 <svelte:window on:keydown={handleKeydown} />
 <main>
-	<canvas id="game-canvas" class="game-canvas" />
+	<canvas id="game-canvas" width="290px" height="500" />
 	<p>
 		elapsedTimeFromGameStart: {elapsedTimeFromGameStart}<br />
 		keydown log: {key}<br />
@@ -119,8 +142,4 @@
 </main>
 
 <style>
-	.game-canvas {
-		width: 290px;
-		height: 500px;
-	}
 </style>
