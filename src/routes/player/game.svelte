@@ -8,7 +8,7 @@
 
 	const LANE_COUNT = 4;
 	const LANE_SPACING = 5;
-	const NOTE_HI_SPEED = 3;
+	const HI_SPEED = 16; // いわゆるハイスピ 大きくするとノーツの間隔が開く
 
 	// let notes = [
 	// 	// todo: ドメインモデル作ろう Speedは定数で管理しよう
@@ -25,7 +25,7 @@
 
 	const chart = new Chart(soiree);
 	let notes = chart.notes;
-	console.log(notes[0]);
+	console.log(notes);
 
 	let elapsedTimeFromGameStart = 0;
 	let key = '';
@@ -57,7 +57,7 @@
 	function drawNotes() {
 		for (const note of notes) {
 			const x = note.lane * (NOTE_WIDTH + LANE_SPACING);
-			const y = note.appearingFrame * NOTE_HI_SPEED;
+			const y = note.appearingFrame * HI_SPEED;
 			ctx.fillStyle = '#93bcf2';
 			ctx.fillRect(x, -y, NOTE_WIDTH, NOTE_HEIGHT);
 		}
@@ -67,6 +67,7 @@
 		for (const note of notes) {
 			note.appearingFrame -= chart.noteSpeed;
 		}
+		console.log(notes[0]);
 	}
 
 	export function gameLoop(timestamp?: DOMHighResTimeStamp) {
@@ -75,11 +76,11 @@
 		console.log(timestamp);
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		drawLanes();
-		drawNotes();
 		updateNotes();
+		drawNotes();
 		timestamp ||= 0;
 		elapsedTimeFromGameStart = timestamp;
-		if (timestamp < 35000) {
+		if (timestamp < 40000) {
 			// 開発用に一定時間で止める
 			requestAnimationFrame(gameLoop);
 		}
@@ -120,6 +121,6 @@
 <style>
 	.game-canvas {
 		width: 290px;
-		height: 530px;
+		height: 500px;
 	}
 </style>
