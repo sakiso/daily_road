@@ -9,7 +9,8 @@
 
 	const LANE_COUNT = 4;
 	const LANE_SPACING = 5;
-	const noteSpeed = 0.5; // ノーツが表示されてから判定ラインに重なるまでの時間。緑数字
+	const noteSpeed = 0.6; // ノーツが表示されてから判定ラインに重なるまでの時間。緑数字
+	const offsetFrame = 5; // spotifyから再生するのと譜面を再生するのとの若干の差を吸収するオフセット
 
 	let notes: Array<Note>;
 	let elapsedTimeFromGameStart = 0;
@@ -57,7 +58,7 @@
 		for (const note of notes) {
 			// レーンの高さ - (レーンの高さ - / 緑数字*60) * appearingFrame
 			const x = note.lane * (NOTE_WIDTH + LANE_SPACING);
-			const y = 500 - (500 / (noteSpeed * 60)) * note.appearingFrame;
+			const y = 500 - (500 / (noteSpeed * 60)) * (note.appearingFrame + offsetFrame);
 			ctx.fillStyle = '#93bcf2';
 			ctx.fillRect(x, y, NOTE_WIDTH, NOTE_HEIGHT);
 			ctx.fillStyle = '#000';
